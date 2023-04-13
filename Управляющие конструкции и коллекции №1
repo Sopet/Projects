@@ -1,0 +1,53 @@
+N = int(input('Введите порядковый номер: '))
+num = N
+num_calculation = N
+calculation = 1
+fibonacci = 0
+factorial = 1
+number_1 = 0
+number_2 = 1
+list_sum_num_fib = []
+list_first_nums_fib = [0, 1]
+
+if N == 0:
+  fibonacci == 0
+  factorial == 1
+  print('Ряд Фибоначчи:', fibonacci)
+  print('Факториал:', factorial)
+  print('Порядковый номер члена ряда Фибоначчи, приближенный к Факториалу:', calculation)
+  print('Программа завершена!')
+else:
+  print('Ряд Фибоначчи:', end = ' ')
+  for number in range(1, N + 1):
+    sum_num_fib = number_1 + number_2 # Ряд Фибоначчи
+    temp = number_1
+    number_1 = number_2
+    temp = number_2
+    number_2 = sum_num_fib
+    list_sum_num_fib.append(sum_num_fib)
+    list_fibonacci = [*list_first_nums_fib, *list_sum_num_fib] # Объединяет списки
+    temp_fib = list_fibonacci[-1] # Для разницы Фибоначчи
+    list_fibonacci.pop(-1)
+    fibonacci = int(list_fibonacci[-1])
+    print(fibonacci, end = ' ')
+    difference_fib_num = temp_fib - fibonacci #Разница для цикла while
+    factorial *= N # Факториал
+    N -= 1
+  print()
+  print('Факториал:', factorial)
+  while factorial > fibonacci:
+    fibonacci += difference_fib_num
+    temp = difference_fib_num
+    difference_fib_num = fibonacci - temp
+    low_difference_fib_num = difference_fib_num
+    high_difference_fib_num = fibonacci
+    num_calculation += 1
+    if high_difference_fib_num - factorial <= factorial - low_difference_fib_num:
+      calculation = num_calculation
+    else:
+      calculation = num_calculation - 1
+  print('Порядковый номер члена ряда Фибоначчи, приближенный к Факториалу:', calculation)
+  if factorial == fibonacci:
+    print('Программа завершена!')
+  elif factorial < fibonacci:
+    print('Программа завершена!')
