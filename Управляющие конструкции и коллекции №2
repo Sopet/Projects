@@ -1,0 +1,300 @@
+import random
+countries_list = ["Аргентина", "Россия", "США", "Канада", "Испания", "Италия", "Франция", "Германия", "Израиль", "Китай", "Япония", "Греция", "Португалия", "Бразилия"]
+params = ["Список температур по месяцам, °С", "Список показателей влажности по месяцам, %/100", "Давление, Па", "Задымленность, моль/м³", "Уровень опасности"]
+random_counts = ["-30,+30", "5,90", "100000,102000", "1,100", "1,5"]
+
+total_dict_countries = {}
+params_dict = {}
+
+info_input = str.lower(input('Введите одно значение из вариантов (params, info, info_for, сount_plus, params_plus_for, means_params): '))
+months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+all_deviation = ['Средние характеристики по странам']
+middle_deviation = ['Среднее отклонение']
+min_deviation = ['Минимальное отклонение']
+max_deviation = ['Максимальное отклонение']
+standart_deviation = ['Стандартное отклонение']
+counter_pars = 0
+list_stand = []
+
+if info_input == 'params':
+  """1. Пункт №1 (Средние характеристики по странам) задания:"""
+  for param in range(0, len(params)):
+    list_month = []
+    for country in countries_list:
+      for month in range(0, 12):
+        list_month.append(random.randint(int(random_counts[param].split(",")[0]), int(random_counts[param].split(",")[1])))
+        counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+        if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[0] # "Список температур по месяцам, °С"
+        elif counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[1] # "Список показателей влажности по месяцам, %/100"
+        elif counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[2] # "Давление, Па"
+        elif counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[3] # "Задымленность, моль/м³"
+        else: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[4] # "Уровень опасности"
+        middle_values = dict.fromkeys(middle_deviation, sum(list_month[len(list_month) - 12: len(list_month)]) // 12) # Среднее отклонение
+        min_values = dict.fromkeys(min_deviation, min(list_month[len(list_month) - 12: len(list_month)])) # Минимальное отклонение
+        max_values = dict.fromkeys(max_deviation, max(list_month[len(list_month) - 12: len(list_month)])) # Максимальное отклонение
+        stand = (list_month[len(list_month) - 1] - middle_values['Среднее отклонение']) ** 2
+        list_stand.append(stand)
+        stand_par = (sum(list_stand[len(list_stand) - 12: len(list_stand)]) / 12) ** 0.5
+        standart_values = dict.fromkeys(standart_deviation, int(stand_par))  # Стандартное отклонение
+        deviations_pars = dict.fromkeys([pars], {**middle_values, **min_values, **max_values, **standart_values}) # Средние характеристики по параметрам
+        deviations = dict.fromkeys([country], deviations_pars) # Средние характеристики по параметрам и странам
+      print(deviations)
+elif info_input == 'info':
+  """2.1. Код на полный просмотр обычного словаря пункта №2 подпункта №1:"""
+  for param in range(0, len(params)):
+    list_month = []
+    list_month_1 = []
+    for country in countries_list:
+      for month in range(0, 12):
+        counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+        if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[0] # "Список температур по месяцам, °С"
+        elif counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[1] # "Список показателей влажности по месяцам, %/100"
+        elif counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[2] # "Давление, Па"
+        elif counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[3] # "Задымленность, моль/м³"
+        else: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[4] # "Уровень опасности"
+        list_month.append(random.randint(int(random_counts[param].split(",")[0]), int(random_counts[param].split(",")[1])))
+        list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+        params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+        parameters = dict.fromkeys([pars], params_dict[params[param]]) # Словарь параметров для total_dict_countries[country]
+        total_dict_countries[country] = parameters # Обычный просмотр словаря для вызова info
+    print(total_dict_countries)
+elif info_input == 'info_for':
+  """2.2. Код на запрашивание информации о стране пункта №2 подпункта №2:"""
+  country_info = input('Введите страну из вариантов (Аргентина, Россия, США, Канада, Испания, Италия, Франция, Германия, Израиль, Китай, Япония, Греция, Португалия, Бразилия): ') # Вводим страну, о которой хотим узнать показатели
+  if country_info in countries_list: # Оператор для определения имеется ли страна в списке
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[0] # "Список температур по месяцам, °С"
+          elif counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[1] # "Список показателей влажности по месяцам, %/100"
+          elif counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[2] # "Давление, Па"
+          elif counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[3] # "Задымленность, моль/м³"
+          else: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[4] # "Уровень опасности"
+          list_month.append(random.randint(int(random_counts[param].split(",")[0]), int(random_counts[param].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([pars], params_dict[params[param]]) # Словарь параметров для total_dict_countries[country]
+          total_dict_countries[country] = parameters # Просмотр словаря определённой страны для вызова info_for
+      print(total_dict_countries[country_info])
+  else:
+    print('Проверьте правильность написания страны!')
+elif info_input == 'сount_plus':
+  """2.3. Код на добавление информации о новой стране пункта №2 подпункта №3:"""
+  country_info = str.capitalize(input('Добавьте страну: ')) # Добавляем страну, о которой хотим узнать показатели
+  countries_list.append(country_info) # Добавляем страну в список
+  for param in range(0, len(params)):
+    list_month = []
+    list_month_1 = []
+    for country in countries_list:
+      for month in range(0, 12):
+        counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+        if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[0] # "Список температур по месяцам, °С"
+        elif counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[1] # "Список показателей влажности по месяцам, %/100"
+        elif counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[2] # "Давление, Па"
+        elif counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[3] # "Задымленность, моль/м³"
+        else: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+          pars = params[4] # "Уровень опасности"
+        list_month.append(random.randint(int(random_counts[param].split(",")[0]), int(random_counts[param].split(",")[1])))
+        list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+        params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+        parameters = dict.fromkeys([pars], params_dict[params[param]]) # Словарь параметров для total_dict_countries[country]
+        total_dict_countries[country] = parameters # Просмотр словаря с новой страной для вызова сount_plus
+    print(total_dict_countries)
+elif info_input == 'params_plus_for':
+  """2.4. Код на дополнить список пункта №2 подпункта №4:"""
+  country_info = str.capitalize(input('Введите страну из вариантов (Аргентина, Россия, США, Канада, Испания, Италия, Франция, Германия, Израиль, Китай, Япония, Греция, Португалия, Бразилия): ')) # Вводим страну из списка
+  param_info = str.capitalize(input('Укажите параметр из вариантов (Температура, Влажность, Давление, Задымленность, Опасность): ')) # Вводим параметр из списка
+  if country_info in countries_list and param_info == 'Температура': # Оператор для определения страны и параметра Температура из списков
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[0] # "Список температур по месяцам, °С"
+          list_month.append(random.randint(int(random_counts[0].split(",")[0]), int(random_counts[0].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([pars], params_dict[params[0]]) # Словарь параметров температуры для total_dict_countries[country]
+          total_dict_countries[country_info] = parameters # Просмотр словаря температуры выбранной страны из списка для вызова params_plus_for
+      month_info = str.capitalize(input('Введите месяц, которому хотите изменить значение: '))
+      if month_info in months:
+        number = int(input('Введите новое значение: '))
+        total_dict_countries[country_info]['Список температур по месяцам, °С'][month_info] = number
+        print(total_dict_countries)
+        break
+      else:
+        print('Введите корректные данные!')
+        break
+  elif country_info in countries_list and param_info == 'Влажность': # Оператор для определения страны и параметра Влажность из списков
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if 168 < counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[1] # "Список показателей влажности по месяцам, %/100"
+          list_month.append(random.randint(int(random_counts[1].split(",")[0]), int(random_counts[1].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([pars], params_dict[params[0]]) # Словарь параметров влажности для total_dict_countries[country]
+          total_dict_countries[country_info] = parameters # Просмотр словаря влажности выбранной страны из списка для вызова params_plus_for
+      month_info = str.capitalize(input('Введите месяц, которому хотите изменить значение: '))
+      if month_info in months:
+        number = int(input('Введите новое значение: '))
+        total_dict_countries[country_info]['Список показателей влажности по месяцам, %/100'][month_info] = number
+        print(total_dict_countries)
+        break
+      else:
+        print('Введите корректные данные!')
+        break
+  elif country_info in countries_list and param_info == 'Давление': # Оператор для определения страны и параметра Давление из списков
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if 336 < counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[2] # "Давление, Па"
+          list_month.append(random.randint(int(random_counts[2].split(",")[0]), int(random_counts[2].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([params[2]], params_dict[params[0]]) # Словарь параметров давления для total_dict_countries[country]
+          total_dict_countries[country_info] = parameters # Просмотр словаря давления выбранной страны из списка для вызова params_plus_for
+      month_info = str.capitalize(input('Введите месяц, которому хотите изменить значение: '))
+      if month_info in months:
+        number = int(input('Введите новое значение: '))
+        total_dict_countries[country_info]['Давление, Па'][month_info] = number
+        print(total_dict_countries)
+        break
+      else:
+        print('Введите корректные данные!')
+        break
+  elif country_info in countries_list and param_info == 'Задымленность': # Оператор для определения страны и параметра Задымленность из списков
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if 504 < counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[3] # "Задымленность, моль/м³"
+          list_month.append(random.randint(int(random_counts[3].split(",")[0]), int(random_counts[3].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([params[3]], params_dict[params[0]]) # Словарь параметров задымленности для total_dict_countries[country]
+          total_dict_countries[country_info] = parameters # Просмотр словаря задымленности выбранной страны из списка для вызова params_plus_for
+      month_info = str.capitalize(input('Введите месяц, которому хотите изменить значение: '))
+      if month_info in months:
+        number = int(input('Введите новое значение: '))
+        total_dict_countries[country_info]['Задымленность, моль/м³'][month_info] = number
+        print(total_dict_countries)
+        break
+      else:
+        print('Введите корректные данные!')
+        break
+  elif country_info in countries_list and param_info == 'Опасность': # Оператор для определения страны и параметра Опасность из списков
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if 672 < counter_pars <= 840: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[4] # "Уровень опасности"
+          list_month.append(random.randint(int(random_counts[4].split(",")[0]), int(random_counts[4].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([params[4]], params_dict[params[0]]) # Словарь параметров опасности для total_dict_countries[country]
+          total_dict_countries[country_info] = parameters # Просмотр словаря опасности выбранной страны из списка для вызова params_plus_for
+      month_info = str.capitalize(input('Введите месяц, которому хотите изменить значение: '))
+      if month_info in months:
+        number = int(input('Введите новое значение: '))
+        total_dict_countries[country_info]['Уровень опасности'][month_info] = number
+        print(total_dict_countries)
+        break
+      else:
+        print('Введите корректные данные!')
+        break
+  else:
+    print('Проверьте правильность написания страны или параметра!')
+elif info_input == 'means_params':
+  """2.5. Код на запрос показа информации о параметрах или об определенной стране пункта №2 подпункта №5:"""
+  number = int(input('Введите цифру 1, если необходимо показать информацию о всех средних параметрах или цифру 2, если необходимо показать информацию об определенной стране: '))
+  if number == 1:
+    for param in range(0, len(params)):
+      list_month = []
+      list_month_1 = []
+      for country in countries_list:
+        for month in range(0, 12):
+          counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+          if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[0] # "Список температур по месяцам, °С"
+          elif counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[1] # "Список показателей влажности по месяцам, %/100"
+          elif counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[2] # "Давление, Па"
+          elif counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[3] # "Задымленность, моль/м³"
+          else: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+            pars = params[4] # "Уровень опасности"
+          list_month.append(random.randint(int(random_counts[param].split(",")[0]), int(random_counts[param].split(",")[1])))
+          list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+          params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+          parameters = dict.fromkeys([pars], params_dict[params[param]]) # Словарь параметров для total_dict_countries[country]
+          total_dict_countries[country] = parameters # Обычный просмотр словаря для вызова info
+      print(total_dict_countries)
+  elif number == 2:
+    country_info = str.capitalize(input('Введите страну из вариантов (Аргентина, Россия, США, Канада, Испания, Италия, Франция, Германия, Израиль, Китай, Япония, Греция, Португалия, Бразилия): ')) # Вводим страну, о которой хотим узнать показатели
+    if country_info in countries_list: # Оператор для определения имеется ли страна в списке
+      for param in range(0, len(params)):
+        list_month = []
+        list_month_1 = []
+        for country in countries_list:
+          for month in range(0, 12):
+            counter_pars += 1 # Счётчик для условной инструкции ниже (if, elif, else)
+            if counter_pars <= 168: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+              pars = params[0] # "Список температур по месяцам, °С"
+            elif counter_pars <= 336: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+              pars = params[1] # "Список показателей влажности по месяцам, %/100"
+            elif counter_pars <= 504: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+              pars = params[2] # "Давление, Па"
+            elif counter_pars <= 672: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+              pars = params[3] # "Задымленность, моль/м³"
+            else: # Оператор ветвления для pars, чтобы в конце кода выводилось правильно в deviations_pars из списка params
+              pars = params[4] # "Уровень опасности"
+            list_month.append(random.randint(int(random_counts[param].split(",")[0]), int(random_counts[param].split(",")[1])))
+            list_month_1.append(months[:month + 1]) # Месяцы для params_dict[params[param]]
+            params_dict[params[param]] = dict(zip(list_month_1[-1], list_month[len(list_month) - 12: len(list_month)])) # Ключи и значения месяцев и их цифр для parameters
+            parameters = dict.fromkeys([pars], params_dict[params[param]]) # Словарь параметров для total_dict_countries[country]
+            total_dict_countries[country] = parameters # Просмотр словаря определённой страны для вызова info_for
+        print(total_dict_countries[country_info])
+  else:
+    print('Введите корректное число!')
+else:
+  print('Проверьте правильность написания введённого значения!')
